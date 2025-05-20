@@ -9,7 +9,7 @@ is possible that the data between development sessions needs to be saved, for
 that porpoise configure the `neo4j_data_storage_path` variable.
 
 ```shell
-neo4j_data_storage_path="$HOME/repositories/STRAST-UPM/raphtory_playground/neo4j-data"
+neo4j_data_storage_path="$HOME/repositories/STRAST-UPM/raphtory_playground/databases_data/neo4j"
 sudo docker run --rm -d \
     -p 7474:7474 -p 7687:7687 \
     --name neo4j-apoc \

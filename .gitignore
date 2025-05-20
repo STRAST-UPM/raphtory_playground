@@ -175,6 +175,6 @@ cython_debug/
 
 # Ignores from project
 # Neo4J database
-neo4j-data/
-!neo4j-data/.placeholder
+databases_data/neo4j/
+!databases_data/neo4j-data/.placeholder
 
