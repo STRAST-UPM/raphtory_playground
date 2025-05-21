@@ -174,7 +174,7 @@ cython_debug/
 .pypirc
 
 # Ignores from project
-# Neo4J database
-databases_data/neo4j/
-!databases_data/neo4j-data/.placeholder
 
+# Datasets
+datasets/
+!datasets/.placeholder

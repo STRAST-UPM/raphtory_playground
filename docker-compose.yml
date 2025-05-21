@@ -1,0 +1,54 @@
+services:
+  timescaledb:
+    image: timescale/timescaledb-ha:pg17
+    container_name: timescaledb
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: password
+    volumes:
+      - raphtory_timescaledb_volume:/home/postgres/pgdata/data
+    networks:
+      - raphtory_net
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: postgresql_admin
+    ports:
+      - "8080:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@email.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    volumes:
+      - raphtory_postgres_admin_volume:/var/lib/pgadmin
+    networks:
+      - raphtory_net
+    restart: unless-stopped
+
+  neo4j-apoc:
+    image: neo4j:2025.04.0
+    container_name: neo4j-apoc
+    ports:
+      - "7474:7474"
+      - "7687:7687"
+    environment:
+      NEO4J_AUTH: "none"
+      NEO4J_apoc_export_file_enabled: "true"
+      NEO4J_apoc_import_file_enabled: "true"
+      NEO4J_apoc_import_file_use__neo4j__config: "true"
+      NEO4J_PLUGINS: '["apoc"]'
+    volumes:
+      - raphtory_neo4j_volume:/data
+    networks:
+      - raphtory_net
+    restart: unless-stopped
+
+volumes:
+  raphtory_timescaledb_volume:
+  raphtory_postgres_admin_volume:
+  raphtory_neo4j_volume:
+
+networks:
+  raphtory_net:
+    driver: bridge

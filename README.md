@@ -1,26 +1,41 @@
 # raphtory_playground
 
-A playground to test the funcionalities of Raphtory
+A playground to test the functionalities of Raphtory
 
-## Enviroment
+## Environment
 
-We are going to use a local Neo4J database deployment, just for development. It
-is possible that the data between development sessions needs to be saved, for
-that porpoise configure the `neo4j_data_storage_path` variable.
+As this is a playground testing environment all the databases that simulates a
+production environment are going to be deployed locally using containers but
+with persistent data volumes. The `docker-compose.yml` file describes all the
+deployment. Use the following command to start:
 
 ```shell
-neo4j_data_storage_path="$HOME/repositories/STRAST-UPM/raphtory_playground/databases_data/neo4j"
-sudo docker run --rm -d \
-    -p 7474:7474 -p 7687:7687 \
-    --name neo4j-apoc \
-    -e NEO4J_AUTH=none \
-    -e NEO4J_apoc_export_file_enabled=true \
-    -e NEO4J_apoc_import_file_enabled=true \
-    -e NEO4J_apoc_import_file_use__neo4j__config=true \
-    -e NEO4J_PLUGINS=\[\"apoc\"\] \
-    --volume "$neo4j_data_storage_path":/data \
-    neo4j:2025.04.0
+sudo docker compose up -d
 ```
 
-In this URL [http://localhost:7474/browser/](http://localhost:7474/browser/) 
-a web interface is deployed to interact with the database if needed.
+And the following one for stop the service. If you add the option `-v` it will
+destroy the defined volumes.
+
+```shell
+sudo docker compose down
+```
+
+### TimescaleDB
+
+- [Database deployment documentation](
+https://docs.timescale.com/self-hosted/latest/install/installation-docker/)
+- [Web administrator deployment documentation](
+  https://www.pgadmin.org/docs/pgadmin4/latest/container_deployment.html)
+
+In this [URL](http://localhost:8080/) a web interface is deployed to interact
+with the database if needed. For login into the administration service use
+`user@email.com` and `password` as the credentials. 
+
+When configuring the
+timescaledb connection use the name of the service in `docker-compose.yml` file
+as the address to reach the service. The default one is `timescaledb`.
+
+### Neo4J
+
+In this [URL](http://localhost:7474/browser/) a web interface is deployed to
+interact with the database if needed. No user or password is needed.
