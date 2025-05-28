@@ -1,15 +1,33 @@
+# external imports
 from raphtory import Graph
-from datetime import datetime
 
+# internal imports
+from app.src.classes.helpers.graphql_server import GraphQLServer
+from app.src.utilities.constants import (
+    GRAPHS_DIR
+)
+from app.src.utilities.utils import export_graphs_to_file
+
+# main
 if __name__ == '__main__':
 
-    g = Graph()
-    g.add_node(timestamp="2021-02-03 14:01:15", id=10)
+    # Create a new graph
+    graph = Graph()
 
-    # Create a python datetime object
-    datetime_obj = datetime.fromisoformat("2021-02-03 14:01:30")
-    g.add_node(timestamp=datetime_obj, id=10)
+    # Add some data to your graph
+    graph.add_node(timestamp=1, id="Alice")
+    graph.add_node(timestamp=1, id="Bob")
+    graph.add_node(timestamp=1, id="Charlie")
+    graph.add_edge(timestamp=2, src="Bob", dst="Charlie", properties={"weight": 5.0})
+    graph.add_edge(timestamp=3, src="Alice", dst="Bob", properties={"weight": 10.0})
+    graph.add_edge(timestamp=3, src="Bob", dst="Charlie", properties={"weight": -15.0})
 
-    print(g)
-    print(g.node(id=10).history())
-    print(g.node(id=10).history_date_time())
+    # Export graphs to GRAPHS_DIR for visualization
+    export_graphs_to_file(
+        graph_to_export=graph,
+        graph_name="test_graph"
+    )
+
+    # Start GraphQL server for visualization
+    graphql_server = GraphQLServer(GRAPHS_DIR)
+    graphql_server.run_server()

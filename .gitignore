@@ -178,3 +178,7 @@ cython_debug/
 # Datasets
 datasets/
 !datasets/.placeholder
+
+# Graphs exported
+graphs/
+!graphs/.placeholder
