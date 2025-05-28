@@ -1,5 +1,6 @@
 # external imports
 import os
+import shutil
 from raphtory.raphtory import Graph
 
 # internal imports
@@ -21,5 +22,5 @@ def export_graphs_to_file(graph_to_export: Graph, graph_name: str) -> None:
     if not os.path.exists(GRAPHS_DIR):
         os.makedirs(GRAPHS_DIR)
     if os.path.exists(graph_path):
-        os.remove(graph_path)
+        shutil.rmtree(graph_path)
     graph_to_export.save_to_file(graph_path)

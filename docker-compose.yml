@@ -1,34 +1,23 @@
 services:
-  timescaledb:
-    image: timescale/timescaledb-ha:pg17
-    container_name: timescaledb
+  raphtory_playground:
+    build:
+      dockerfile: Dockerfile
+    image:
+      raphtory_playground
+    container_name: raphtory_playground
     ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_PASSWORD: password
+      - "1736:1736"
     volumes:
-      - raphtory_timescaledb_volume:/home/postgres/pgdata/data
+      - raphtory_app_graphs_volume:/usr/src/graphs
     networks:
       - raphtory_net
-    restart: unless-stopped
+    depends_on:
+      pgadmin:
+        condition: service_healthy
 
-  pgadmin:
-    image: dpage/pgadmin4
-    container_name: postgresql_admin
-    ports:
-      - "8080:80"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: user@email.com
-      PGADMIN_DEFAULT_PASSWORD: password
-    volumes:
-      - raphtory_postgres_admin_volume:/var/lib/pgadmin
-    networks:
-      - raphtory_net
-    restart: unless-stopped
-
-  neo4j-apoc:
+  neo4j:
     image: neo4j:2025.04.0
-    container_name: neo4j-apoc
+    container_name: neo4j
     ports:
       - "7474:7474"
       - "7687:7687"
@@ -44,10 +33,44 @@ services:
       - raphtory_net
     restart: unless-stopped
 
+  timescaledb:
+    image: timescale/timescaledb-ha:pg17
+    container_name: timescaledb
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: password
+    volumes:
+      - raphtory_timescaledb_volume:/home/postgres/pgdata/data
+    networks:
+      - raphtory_net
+    restart: unless-stopped
+    depends_on:
+      neo4j:
+        condition: service_healthy
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: postgresql_admin
+    ports:
+      - "8080:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user@email.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    volumes:
+      - raphtory_postgres_admin_volume:/var/lib/pgadmin
+    networks:
+      - raphtory_net
+    restart: unless-stopped
+    depends_on:
+      timescaledb:
+        condition: service_healthy
+
 volumes:
   raphtory_timescaledb_volume:
   raphtory_postgres_admin_volume:
   raphtory_neo4j_volume:
+  raphtory_app_graphs_volume:
 
 networks:
   raphtory_net:
