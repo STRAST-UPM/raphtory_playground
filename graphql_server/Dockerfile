@@ -1,13 +1,12 @@
 FROM python:3.12.10-bookworm
 
-WORKDIR /usr/src/raphtory_playground
+WORKDIR /usr/src/graphql_server
 
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-RUN mkdir -p "app"
-COPY ./app/* ./app
 RUN mkdir -p "graphs"
-COPY ./graphs/* ./graphs
+COPY ./server ./server
 
-CMD [ "python", "./main.py" ]
+WORKDIR /usr/src/graphql_server/server
+CMD [ "python", "main.py" ]

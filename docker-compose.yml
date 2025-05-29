@@ -1,19 +1,17 @@
 services:
-  raphtory_playground:
+  raphtory_graphql_server:
     build:
+      context: ./graphql_server
       dockerfile: Dockerfile
     image:
-      raphtory_playground
-    container_name: raphtory_playground
+      raphtory_graphql_server
+    container_name: raphtory_graphql_server
     ports:
       - "1736:1736"
     volumes:
-      - raphtory_app_graphs_volume:/usr/src/graphs
+      - ./graphql_server/graphs:/usr/src/graphql_server/graphs
     networks:
-      - raphtory_net
-    depends_on:
-      pgadmin:
-        condition: service_healthy
+      - main_net
 
   neo4j:
     image: neo4j:2025.04.0
@@ -28,9 +26,10 @@ services:
       NEO4J_apoc_import_file_use__neo4j__config: "true"
       NEO4J_PLUGINS: '["apoc"]'
     volumes:
-      - raphtory_neo4j_volume:/data
+      - neo4j_data_volume:/data
+      - neo4j_logs_volume:/logs
     networks:
-      - raphtory_net
+      - main_net
     restart: unless-stopped
 
   timescaledb:
@@ -41,13 +40,10 @@ services:
     environment:
       POSTGRES_PASSWORD: password
     volumes:
-      - raphtory_timescaledb_volume:/home/postgres/pgdata/data
+      - timescaledb_volume:/home/postgres/pgdata/data
     networks:
-      - raphtory_net
+      - main_net
     restart: unless-stopped
-    depends_on:
-      neo4j:
-        condition: service_healthy
 
   pgadmin:
     image: dpage/pgadmin4
@@ -58,20 +54,17 @@ services:
       PGADMIN_DEFAULT_EMAIL: user@email.com
       PGADMIN_DEFAULT_PASSWORD: password
     volumes:
-      - raphtory_postgres_admin_volume:/var/lib/pgadmin
+      - postgres_admin_volume:/var/lib/pgadmin
     networks:
-      - raphtory_net
+      - main_net
     restart: unless-stopped
-    depends_on:
-      timescaledb:
-        condition: service_healthy
 
 volumes:
-  raphtory_timescaledb_volume:
-  raphtory_postgres_admin_volume:
-  raphtory_neo4j_volume:
-  raphtory_app_graphs_volume:
+  timescaledb_volume:
+  postgres_admin_volume:
+  neo4j_data_volume:
+  neo4j_logs_volume:
 
 networks:
-  raphtory_net:
+  main_net:
     driver: bridge

@@ -1,3 +1,6 @@
+# external imports
+
+# internal imports
 from raphtory import graphql
 
 class GraphQLServer:

@@ -1,8 +1,8 @@
 # external imports
 from raphtory import Graph
+from raphtory import graph_loader
 
 # internal imports
-from app.src.classes.helpers.graphql_server import GraphQLServer
 from app.src.utilities.constants import (
     GRAPHS_DIR
 )
@@ -22,12 +22,10 @@ if __name__ == '__main__':
     graph.add_edge(timestamp=3, src="Alice", dst="Bob", properties={"weight": 10.0})
     graph.add_edge(timestamp=3, src="Bob", dst="Charlie", properties={"weight": -15.0})
 
+    graph_lotr = graph_loader.lotr_graph()
+
     # Export graphs to GRAPHS_DIR for visualization
     export_graphs_to_file(
-        graph_to_export=graph,
-        graph_name="test_graph"
+        graph_to_export=graph_lotr,
+        graph_name="lotr_graph"
     )
-
-    # Start GraphQL server for visualization
-    graphql_server = GraphQLServer(GRAPHS_DIR)
-    graphql_server.run_server()

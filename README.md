@@ -18,7 +18,7 @@ destroy the defined volumes.
 
 ```shell
 sudo docker compose down
-```
+``` 
 
 ### TimescaleDB
 
@@ -39,3 +39,16 @@ as the address to reach the service. The default one is `timescaledb`.
 
 In this [URL](http://localhost:7474/browser/) a web interface is deployed to
 interact with the database if needed. No user or password is needed.
+
+### Raphtory GraphQL GUI
+
+In order to be able to play and interact with the graphs created with Raphtory a
+GraphQL server is also deployed. The `./graphql_server/graphs` is the folder
+where the server and the `main.py` that treats raphtory graphs are going to use.
+The service is accesible in this [URL](http://localhost:1736/).
+
+### GUIs summary
+
+- [TimescaleDB](http://localhost:8080/)
+- [Neo4J](http://localhost:7474/browser/)
+- [Raphtory GraphQL](http://localhost:1736/)
