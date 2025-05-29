@@ -180,4 +180,5 @@ datasets/
 !datasets/.placeholder
 
 # Graphs exported
+graphql_server/graphs
 !graphql_server/graphs/.placeholder
